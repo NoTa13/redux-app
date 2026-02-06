@@ -1,24 +1,31 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleTheme } from '../features/ui/uiSlice'
+import styles from './Header.module.css'
 
 const Header = () => {
   const dispatch = useDispatch()
   const theme = useSelector(state => state.ui.theme)
 
   return (
-    <header
-      style={{
-        padding: '20px',
-        background: theme === 'light' ? '#eee' : '#333',
-        color: theme === 'light' ? '#000' : '#fff',
-        transition: 'all 0.3s ease',
-      }}
-    >
-      <h1>Мой сайт</h1>
-      <button onClick={() => dispatch(toggleTheme())}>
-        Сменить тему
-      </button>
+    <header className={`${styles.header} ${theme === 'dark' ? styles.dark : styles.light}`}>
+      <div className={styles.logo}>
+        <span className={styles.bracket}>[</span> 
+        ENDFIELD OPS 
+        <span className={styles.bracket}>]</span>
+      </div>
+      
+      <nav className={styles.nav}>
+        {/* Будущие разделы проекта */}
+        <a href="#base" className={styles.navLink}>Строительство Базы</a>
+        <a href="#operators" className={styles.navLink}>Операторы</a>
+        <a href="#map" className={styles.navLink}>Карта Талос-II</a>
+        <a href="#protocol" className={styles.navLink}>Протоколы</a>
+        
+        <button className={styles.themeBtn} onClick={() => dispatch(toggleTheme())}>
+          {theme === 'light' ? '⚡ АКТИВИРОВАТЬ НОЧЬ' : '☀️ ДНЕВНОЙ ЦИКЛ'}
+        </button>
+      </nav>
     </header>
   )
 }

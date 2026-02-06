@@ -1,0 +1,45 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;
+    height: 70px;
+    border-bottom: 2px solid #444;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .light { background: #f0f0f0; color: #1a1a1a; }
+  .dark { background: #0a0a0a; color: #00ff9d; border-color: #00ff9d; }
+  
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+  }
+  
+  .bracket { color: #888; margin: 0 5px; }
+  
+  .nav { display: flex; gap: 25px; align-items: center; }
+  
+  .navLink {
+    text-decoration: none;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: inherit;
+    letter-spacing: 1px;
+    position: relative;
+    transition: 0.3s;
+  }
+  
+  .navLink:hover { color: #ff3e3e; }
+  
+  .themeBtn {
+    background: transparent;
+    border: 1px solid currentColor;
+    color: inherit;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+  }
