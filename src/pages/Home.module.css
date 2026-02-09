@@ -33,3 +33,53 @@
   @keyframes blinker {
     50% { opacity: 0; }
   }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+    max-width: 1100px;
+  }
+  
+  .opCard {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    transition: 0.2s;
+  }
+  
+  .opCard:hover {
+    background: rgba(0, 255, 157, 0.1);
+    border-color: #00ff9d;
+  }
+  
+  .detailCard {
+    background: #1a1a1a;
+    border: 2px solid #00ff9d;
+    padding: 30px;
+    position: sticky;
+    top: 20px;
+    color: #fff;
+  }
+  
+  .loader {
+    font-family: monospace;
+    font-size: 20px;
+    color: #ff3e3e;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .closeBtn {
+    margin-top: 20px;
+    background: #ff3e3e;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+  }
