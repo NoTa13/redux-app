@@ -1,58 +1,60 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { fetchOperators, selectOperator } from '../features/operators/operatorsSlice'
-import styles from './Home.module.css'
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchOperators, selectOperator, addOperator, deleteOperator, updateOperator } from '../features/operators/operatorsSlice';
+import styles from './Home.module.css';
 
 const Home = () => {
-  const dispatch = useDispatch()
-  
-  const { items, selectedOperator, status } = useSelector(state => state.operators)
-  const theme = useSelector(state => state.ui.theme)
+  const dispatch = useDispatch();
+  const { items, selectedOperator, status } = useSelector(state => state.operators);
+  const [newName, setNewName] = useState('');
 
-  useEffect(() => {
-    dispatch(fetchOperators())
-  }, [dispatch])
+  useEffect(() => { if (status === 'idle') dispatch(fetchOperators()); }, [status, dispatch]);
+
+  const handleCreate = () => {
+    if (!newName) return;
+    const newOp = { id: Date.now(), name: newName, codeName: 'NEW-RECRUIT', department: 'Frontier', status: 'Active' };
+    dispatch(addOperator(newOp));
+    setNewName('');
+  };
 
   return (
-    <main className={`${styles.container} ${theme === 'dark' ? styles.dark : styles.light}`}>
-      <h2 className={styles.title}>ТЕРМИНАЛ: СПИСОК ОПЕРАТОРОВ</h2>
+    <main className={styles.container}>
+      <div className={styles.adminPanel}>
+        <input 
+          value={newName} 
+          onChange={(e) => setNewName(e.target.value)} 
+          placeholder="Имя нового оператора..." 
+          className={styles.input}
+        />
+        <button onClick={handleCreate} className={styles.addBtn}>+ ЗАРЕГИСТРИРОВАТЬ</button>
+      </div>
 
-      {status === 'loading' && <div className={styles.loader}>[ ПОДКЛЮЧЕНИЕ К СЕРВЕРУ... ]</div>}
-
-      {status === 'succeeded' && (
-        <div className={styles.layout}>
-          {/* ЛЕВАЯ ЧАСТЬ: СПИСОК */}
-          <section className={styles.listSide}>
-            {items.map(op => (
-              <div 
-                key={op.id} 
-                className={styles.opCard} 
-                onClick={() => dispatch(selectOperator(op))}
-              >
-                <span className={styles.opId}>ID-{op.id}</span>
-                <span className={styles.opName}>{op.name}</span>
-              </div>
-            ))}
-          </section>
-
-          {/* ПРАВАЯ ЧАСТЬ: ДЕТАЛИ */}
-          <section className={styles.detailSide}>
-            {selectedOperator ? (
-              <div className={styles.detailCard}>
-                <h3>ЛИЧНОЕ ДЕЛО: {selectedOperator.name}</h3>
-                <p><strong>КОДОВОЕ ИМЯ:</strong> {selectedOperator.codeName}</p>
-                <p><strong>ОТДЕЛ:</strong> {selectedOperator.department}</p>
-                <p><strong>EMAIL:</strong> {selectedOperator.email}</p>
-                <div className={styles.statusBadge}>STATUS: ACTIVE</div>
-              </div>
-            ) : (
-              <div className={styles.emptyDetail}>ОЖИДАНИЕ ВЫБОРА ОБЪЕКТА...</div>
-            )}
-          </section>
+      <div className={styles.layout}>
+        <div className={styles.listSide}>
+          {items.map(op => (
+            <div key={op.id} className={styles.opCard} onClick={() => dispatch(selectOperator(op))}>
+              <span>{op.name}</span>
+              <button onClick={(e) => { e.stopPropagation(); dispatch(deleteOperator(op.id)); }} className={styles.delBtn}>УДАЛИТЬ</button>
+            </div>
+          ))}
         </div>
-      )}
-    </main>
-  )
-}
 
-export default Home 
+        <div className={styles.detailSide}>
+          {selectedOperator ? (
+            <div className={styles.detailCard}>
+              <h3>ИНФО: {selectedOperator.name}</h3>
+              <button 
+                onClick={() => dispatch(updateOperator({...selectedOperator, name: selectedOperator.name + ' [PROMOTED]'}))}
+                className={styles.updBtn}
+              >
+                ПОВЫСИТЬ РАНГ
+              </button>
+            </div>
+          ) : <p>ВЫБЕРИТЕ ОБЪЕКТ</p>}
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default Home;
